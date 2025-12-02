@@ -1,0 +1,88 @@
+# PRD.md – Miles Performance Index (MPI)  
+**Version**: 1.0  
+**Date**: 30 novembre 2025  
+**Produit**: Miles Performance Index Dashboard  
+**Objectif métier**: Mesurer précisément la productivité de l’entreprise (et plus tard de chaque employé) en dollars de chiffre d’affaires générés par heure de travail payée.
+
+## 1. Vision du produit
+Avoir un outil simple et fiable qui, en uploadant deux fichiers hebdomadaires standards, affiche automatiquement :
+- Le MPI journalier de toute l’entreprise
+- (Phase 2) Le MPI individuel de chaque employé
+L’outil doit être accessible via un petit dashboard web privé (pas besoin d’être public).
+
+## 2. Phases du projet
+
+### Phase 1 – MVP (lancé immédiatement)
+Calcul et affichage du MPI journalier global (toute l’équipe confondue).
+
+### Phase 2 – Version avancée (à venir)
+Calcul et affichage du MPI individuel par employé.
+
+## 3. Phase 1 – Requirements détaillés
+
+### 3.1 User Stories principales
+| ID | En tant que | Je veux | Afin de | Priorité |
+|----|-------------|---------|---------|----------|
+| US01 | Gestionnaire | Uploader deux fichiers Excel (ou CSV) par période (semaine ou autre) | Obtenir automatiquement les MPI de chaque journée | Must-have |
+| US02 | Gestionnaire | Voir un tableau clair avec : Date → CA du jour → Heures payées totales → MPI ($/h) | Suivre la performance quotidienne de l’entreprise | Must-have |
+| US03 | Gestionnaire | Télécharger le tableau résultat en Excel | L’archiver ou le partager | Should-have |
+| US04 | Gestionnaire | Voir un graphique de l’évolution du MPI sur la période | Repérer rapidement les tendances | Should-have |
+
+### 3.2 Règles métier – Phase 1
+- Formule MPI journée = **Chiffre d’affaires total de la journée ÷ Total des heures payées ce jour-là**
+- Toutes les lignes du fichier facturation qui ont la même date de service sont agrégées pour ce jour
+- Toutes les heures payées (quelle que soit l’employé) du timesheet pour ce jour sont sommées
+- Aucun filtrage/exclusion : on prend les montants exactement tels qu’ils apparaissent dans les fichiers
+- Période = généralement une semaine, mais l’outil doit accepter n’importe quelle période contenue dans les deux fichiers
+
+### 3.3 Format des fichiers attendus (Phase 1)
+L’outil doit accepter les fichiers même si les colonnes changent légèrement de nom, tant qu’elles contiennent au minimum :
+
+**Fichier 1 – Facturation / Jobs**
+- Date du service (ou date de facture si c’est la même)
+- Montant facturé (colonne contenant le CA du job)
+
+**Fichier 2 – Timesheets**
+- Date
+- Heures travaillées/payées (soit une colonne « heures totales », soit colonnes début/fin que l’outil saura calculer)
+- (Optionnel) Nom employé, taux horaire → ignorés en Phase 1
+
+## 4. Phase 2 – Requirements (à implémenter plus tard)
+
+### 4.1 User Stories principales
+| ID | En tant que | Je veux | Afin de | Priorité |
+|----|-------------|---------|---------|----------|
+| US11 | Gestionnaire | Voir le MPI individuel de chaque employé (période + détail par jour) | Identifier les performers et les leviers d’amélioration | Must-have |
+| US12 | Gestionnaire | Exporter le classement des employés par MPI | Prendre des décisions RH / rémunération | Should-have |
+
+### 4.2 Nouvelles données obligatoires (à mettre en place dans l’opération)
+Un nouveau fichier (ou nouveau format de timesheet) devra contenir :
+- Job ID (ou numéro de client + date, ou tout identifiant unique de job)
+- Employé(s) présent(s) sur le job
+- Heures exactes passées par chaque employé sur ce job précis (possibilité de noter arrivée tardive/départ anticipé)
+- Éventuels coûts additionnels engagés par un employé spécifique pour ce job (ex. taxi, péage, etc.) → ces coûts viendront en déduction du CA attribué à l’employé
+
+### 4.3 Règles de répartition du CA (Phase 2)
+1. Le CA d’un job est réparti **au prorata des heures passées par chaque employé sur ce job**
+2. Si aucun détail d’heures par employé sur le job → on assume répartition égale du temps (et donc du CA)
+3. Si un employé a engagé un coût additionnel sur ce job → ce coût est déduit du CA qui lui est attribué avant calcul de son MPI individuel
+4. Formule MPI employé sur une période =  
+   **(Somme du CA qui lui est attribué sur tous les jobs de la période – ses coûts additionnels) ÷ Total de ses heures payées sur la période**
+
+## 5. Non-functional requirements
+- Dashboard web privé (login simple ou lien magique)
+- Temps de traitement < 10 secondes même avec 1000 lignes
+- Responsive (utilisable sur téléphone)
+- Historique des périodes uploadées conservé
+- Possibilité de supprimer une période erronée
+
+## 6. Livrables attendus
+
+**MVP Phase 1 (à lancer dès validation de ce PRD)**  
+Un dashboard web fonctionnel qui accepte les deux fichiers actuels → affiche immédiatement le tableau + graphique des MPI journaliers.
+
+**Phase 2 (planning à définir)**  
+Évolution du dashboard + nouveau format de saisie des temps par job/employé → affichage des MPI individuels.
+
+Ce PRD est maintenant figé pour la Phase 1.  
+Dis-moi simplement « GO » quand tu veux que je passe directement à la réalisation du dashboard Phase 1.
