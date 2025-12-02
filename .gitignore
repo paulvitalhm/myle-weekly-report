@@ -1,0 +1,19 @@
+# Ignore everything by default
+*
+
+# Allow specific files for the dashboard
+!myle_mpi_dashboard.py
+!requirements.txt
+!run_dashboard.bat
+!.gitignore
+
+# Explicitly ignore data files (just in case)
+*.xlsx
+*.xls
+*.csv
+
+# Ignore system/IDE files
+.vscode/
+.idea/
+__pycache__/
+*.pyc
