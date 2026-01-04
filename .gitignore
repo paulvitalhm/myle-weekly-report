@@ -3,8 +3,12 @@
 
 # Allow specific files for the dashboard
 !myle_mpi_dashboard.py
+!client_dashboard.py
+!dashboard_utils.py
 !requirements.txt
 !run_dashboard.bat
+!run_client_dashboard.bat
+!check_excel.py
 !.gitignore
 
 # Explicitly ignore data files (just in case)
